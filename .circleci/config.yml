@@ -1,0 +1,34 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.7.0
+
+workflows:
+  build_and_push_image-1:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: true
+          dockerfile: Dockerfile
+          path: .
+          region: AWS_REGION
+          repo: circleci-ecr-orb-demo
+          tag: "$CIRCLE_SHA1"
+  build_and_push_image-2:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          filters:
+            branches:
+              only:
+                - master
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: true
+          dockerfile: Dockerfile
+          path: .
+          region: AWS_REGION
+          repo: circleci-ecr-orb-demo-1
+          tag: "$CIRCLE_SHA1"
